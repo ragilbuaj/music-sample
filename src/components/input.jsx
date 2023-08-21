@@ -13,7 +13,7 @@ function Input({activeState}) {
 		<article
 			className={`${
 				isShow ? "block" : "hidden"
-			} absolute w-10/12 h-5/12 top-32 left-[34.5px] text-white font-poppins bg-bgblack rounded-xl shadow shadow-slate-800 flex flex-col items-start justify-start p-5`}
+			} absolute w-10/12 h-1/2 top-32 left-[34.5px] text-white font-poppins bg-bgblack rounded-xl shadow shadow-slate-800 flex flex-col items-start justify-start p-5`}
 		>
 			<section className='w-full flex items-center justify-between'>
 				<h3 className='font-anton tracking-wider text-xl'>Filters</h3>
@@ -55,11 +55,19 @@ function Input({activeState}) {
 					id='genre'
 				>
 					<option value=''>Pop</option>
-					<option value=''>Jazz</option>
 					<option value=''>Rock</option>
+					<option value=''>Metal</option>
+					<option value=''>Jazz</option>
 					<option value=''>Instrumental</option>
 					<option value=''>Punk</option>
-					<option value=''>RnB</option>
+					<option value=''>R&B</option>
+					<option value=''>Hip-Hop</option>
+					<option value=''>Rap</option>
+					<option value=''>Country</option>
+					<option value=''>Indie</option>
+					<option value=''>Folk</option>
+					<option value=''>Blues</option>
+					<option value=''>Classical</option>
 				</select>
 			</div>
 			<div className='w-full flex flex-col gap-1 mt-2'>
@@ -69,9 +77,10 @@ function Input({activeState}) {
 					type='number'
 					name='year'
 					id='year'
+					required
 				/>
 			</div>
-			<button className='bg-slate-500 self-center mt-5 w-1/3 h-10 rounded-md'>
+			<button className='bg-slate-500 self-center mt-10 w-1/3 h-10 rounded-md'>
 				Save
 			</button>
 		</article>
