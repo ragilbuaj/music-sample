@@ -2,7 +2,7 @@ import "../App.css";
 
 function Song({playlist}) {
 	return (
-		<section className='w-full flex flex-col items-center justify-center text-white font-poppins'>
+		<section className='w-full flex flex-col gap-1 items-center justify-center text-white font-poppins overflow-hidden'>
 			{playlist.map((song, index) => (
 				<div
 					key={("track-", index)}

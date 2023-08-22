@@ -74,44 +74,24 @@ function App() {
 		}
 
 		getSongs();
-
-		// setTimeout(() => {
-		// 	const data = songsData.filter((song) => {
-		// 		const yearOfSong = song.album.release_date.substring(0, 4);
-		// 		return yearOfSong >= year && yearOfSong <= rangeYear;
-		// 	});
-
-		// 	const songs = data.map((song) => ({
-		// 		title: song.name,
-		// 		artist: song.artists[0].name,
-		// 		album: song.album.name,
-		// 		image: song.album.images,
-		// 		year: song.album.release_date.substring(0, 4),
-		// 	}));
-
-		// 	setSongs(songs);
-		// 	console.log(songs);
-		// }, 1000);
-
-		async function filteredSongs() {
-			const data = songsData.filter((song) => {
-				const yearOfSong = song.album.release_date.substring(0, 4);
-				return yearOfSong >= year && yearOfSong <= rangeYear;
-			});
-
-			const songs = data.map((song) => ({
-				title: song.name,
-				artist: song.artists[0].name,
-				album: song.album.name,
-				image: song.album.images,
-				year: song.album.release_date.substring(0, 4),
-			}));
-
-			setSongs(songs);
-		}
-
-		filteredSongs();
 	}, [genre]);
+
+	setTimeout(() => {
+		const data = songsData.filter((song) => {
+			const yearOfSong = song.album.release_date.substring(0, 4);
+			return yearOfSong >= year && yearOfSong <= rangeYear;
+		});
+
+		const songs = data.map((song) => ({
+			title: song.name,
+			artist: song.artists[0].name,
+			album: song.album.name,
+			image: song.album.images,
+			year: song.album.release_date.substring(0, 4),
+		}));
+
+		setSongs(songs);
+	}, 500);
 
 	return (
 		<main className='h-screen w-full relative z-[99]'>
