@@ -12,7 +12,8 @@ function Player() {
 			/> */}
 			<iframe
 				className='w-11/12 h-[250px] rounded-xl shadow-sm shadow-slate-500'
-				src='https://www.youtube.com/embed/lyZ3PntFbII'
+				src='https://www.youtube.com/embed/FKGy14ylwMk?autoplay=1'
+				allow='autoplay'
 			></iframe>
 			<button className='w-11/12 flex items-center justify-center border border-slate-500 rounded py-1'>
 				<svg

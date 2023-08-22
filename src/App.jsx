@@ -17,7 +17,52 @@ function App() {
 	const [year, setYear] = useState(null);
 	const [accessToken, setAccessToken] = useState("");
 	const [songsData, setSongsData] = useState([]);
-	const [songs, setSongs] = useState([]);
+	const [randomSongs, setRandomSongs] = useState({
+		title: "Ride On Time",
+		artist: "Tatsuro Yamashita",
+		image: [
+			{
+				url: "https://i.scdn.co/image/ab67616d0000b273e208bc6b63da331f012e0382",
+				height: 640,
+				width: 640,
+			},
+			{
+				url: "https://i.scdn.co/image/ab67616d00001e02e208bc6b63da331f012e0382",
+				height: 300,
+				width: 300,
+			},
+			{
+				url: "https://i.scdn.co/image/ab67616d00004851e208bc6b63da331f012e0382",
+				height: 64,
+				width: 64,
+			},
+		],
+		year: "1990",
+	});
+	const [songs, setSongs] = useState([
+		{
+			title: "Ride On Time",
+			artist: "Tatsuro Yamashita",
+			image: [
+				{
+					url: "https://i.scdn.co/image/ab67616d0000b273e208bc6b63da331f012e0382",
+					height: 640,
+					width: 640,
+				},
+				{
+					url: "https://i.scdn.co/image/ab67616d00001e02e208bc6b63da331f012e0382",
+					height: 300,
+					width: 300,
+				},
+				{
+					url: "https://i.scdn.co/image/ab67616d00004851e208bc6b63da331f012e0382",
+					height: 64,
+					width: 64,
+				},
+			],
+			year: "1990",
+		},
+	]);
 	const rangeYear = parseInt(year) + 10;
 
 	useEffect(() => {
@@ -68,9 +113,25 @@ function App() {
 						year: track.album.release_date.substring(0, 4),
 					}));
 
-					setSongs(tracksDetail);
+					// const newItems = [...songs, ...tracksDetail];
+					// setSongs(newItems);
+
+					if (tracksDetail.length > 0) {
+						const uniqueTracksDetail = tracksDetail.filter((trackDetail) => {
+							return !songs.some((song) => song.title === trackDetail.title);
+						});
+
+						const randomIndex = Math.floor(
+							Math.random() * uniqueTracksDetail.length
+						);
+						const randomSong = uniqueTracksDetail[randomIndex];
+
+						setRandomSongs(randomSong);
+
+						setSongs((prevSongs) => [...prevSongs, randomSong]);
+					}
 				} else {
-					console.log("Filter is empty!");
+					null;
 				}
 			}
 			getData();
