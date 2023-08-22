@@ -6,92 +6,92 @@ import Header from "./components/header";
 import Player from "./components/player";
 import Song from "./components/song";
 import Input from "./components/input";
+import {data} from "autoprefixer";
+
+const clientId = "97d4afb8b0444284a2c618f1f6cb4feb";
+const clientSecret = "c0fd59f9d9ac4383ad54885c0b827376";
 
 function App() {
 	const [isShow, setIsShowing] = useState(false);
-	const [genre, setGenre] = useState("Jazz");
-	const [year, setYear] = useState(1950);
+	const [genre, setGenre] = useState("");
+	const [year, setYear] = useState(null);
 	const [accessToken, setAccessToken] = useState("");
 	const [songsData, setSongsData] = useState([]);
 	const [songs, setSongs] = useState([]);
-	const rangeYear = year + 20;
+	const rangeYear = parseInt(year) + 10;
+
+	useEffect(() => {
+		const authParams = {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/x-www-form-urlencoded",
+			},
+			body: `grant_type=client_credentials&client_id=${clientId}&client_secret=${clientSecret}`,
+		};
+
+		fetch("https://accounts.spotify.com/api/token", authParams)
+			.then((response) => response.json())
+			.then((data) => setAccessToken(data.access_token));
+	}, []);
+
+	useEffect(() => {
+		try {
+			const qParams = {
+				method: "GET",
+				headers: {
+					"Content-Type": "application/json",
+					Authorization: `Bearer ${accessToken}`,
+				},
+			};
+			async function getData() {
+				if (genre !== "") {
+					const fetching = await fetch(
+						`https://api.spotify.com/v1/search?q=genre%3A${genre}&type=track&limit=50`,
+						qParams
+					);
+					const data = await fetching.json();
+
+					setSongsData(data.tracks.items);
+
+					const tracks = data.tracks.items.filter((song) => {
+						const yearOfSong = parseInt(
+							song.album.release_date.substring(0, 4)
+						);
+						return yearOfSong >= year && yearOfSong <= rangeYear;
+					});
+
+					const tracksDetail = tracks.map((track) => ({
+						title: track.name,
+						artist: track.artists[0].name,
+						album: track.album.name,
+						image: track.album.images,
+						year: track.album.release_date.substring(0, 4),
+					}));
+
+					setSongs(tracksDetail);
+				} else {
+					console.log("Filter is empty!");
+				}
+			}
+			getData();
+		} catch (error) {
+			console.log("Error", error);
+		}
+	}, [genre, accessToken, year, rangeYear]);
 
 	const handleClick = (display) => {
 		setIsShowing(display);
 	};
 
-	const handleClose = (active) => {
-		setIsShowing(active);
+	const handleClose = (active, visible) => {
+		setIsShowing(visible);
 	};
 
-	useEffect(() => {
-		async function getAccessToken(clientId, clientSecret) {
-			const data = await axios.post(
-				"https://accounts.spotify.com/api/token",
-				null,
-				{
-					params: {
-						grant_type: "client_credentials",
-					},
-					auth: {
-						username: clientId,
-						password: clientSecret,
-					},
-				}
-			);
-
-			return data.data.access_token;
-		}
-
-		const clientId = "97d4afb8b0444284a2c618f1f6cb4feb";
-		const clientSecret = "c0fd59f9d9ac4383ad54885c0b827376";
-
-		getAccessToken(clientId, clientSecret)
-			.then((token) => {
-				setAccessToken(token);
-			})
-			.catch((error) => {
-				console.log("Error: ", error);
-			});
-
-		async function getSongs() {
-			try {
-				const response = await axios.get("https://api.spotify.com/v1/search?", {
-					headers: {
-						Authorization: `Bearer ${accessToken}`,
-					},
-					params: {
-						q: `genre:${genre}`,
-						type: "track",
-						limit: 50,
-					},
-				});
-
-				setSongsData(response.data.tracks.items);
-			} catch (error) {
-				console.error("Error: ", error);
-			}
-		}
-
-		getSongs();
-	}, [genre]);
-
-	setTimeout(() => {
-		const data = songsData.filter((song) => {
-			const yearOfSong = song.album.release_date.substring(0, 4);
-			return yearOfSong >= year && yearOfSong <= rangeYear;
-		});
-
-		const songs = data.map((song) => ({
-			title: song.name,
-			artist: song.artists[0].name,
-			album: song.album.name,
-			image: song.album.images,
-			year: song.album.release_date.substring(0, 4),
-		}));
-
-		setSongs(songs);
-	}, 500);
+	const handleSubmit = (inputGenre, inputYear, visible) => {
+		setGenre(inputGenre);
+		setYear(inputYear);
+		setIsShowing(visible);
+	};
 
 	return (
 		<main className='h-screen w-full relative'>
@@ -101,7 +101,7 @@ function App() {
 			<Song playlist={songs} />
 			{isShow ? (
 				<>
-					<Input activeState={handleClose} />
+					<Input activeState={handleClose} filters={handleSubmit} />
 				</>
 			) : null}
 		</main>
