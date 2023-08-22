@@ -9,7 +9,7 @@ import Input from "./components/input";
 
 function App() {
 	const [isShow, setIsShowing] = useState(false);
-	const [genre, setGenre] = useState("Classical");
+	const [genre, setGenre] = useState("Jazz");
 	const [year, setYear] = useState(1950);
 	const [accessToken, setAccessToken] = useState("");
 	const [songsData, setSongsData] = useState([]);
@@ -94,7 +94,7 @@ function App() {
 	}, 500);
 
 	return (
-		<main className='h-screen w-full relative z-[99]'>
+		<main className='h-screen w-full relative'>
 			{/* <Sidebar /> */}
 			<Header setVisible={handleClick} />
 			<Player />
