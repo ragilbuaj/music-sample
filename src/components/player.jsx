@@ -5,11 +5,15 @@ import Youtube from "react-youtube";
 function Player() {
 	return (
 		<section className='w-full my-3 flex flex-col gap-5 items-center justify-center'>
-			<Youtube
+			{/* <Youtube
 				className='w-full flex items-center justify-center'
 				iframeClassName='w-11/12 h-[250px] rounded-xl shadow-sm shadow-slate-500'
 				videoId='7maJOI3QMu0'
-			/>
+			/> */}
+			<iframe
+				className='w-11/12 h-[250px] rounded-xl shadow-sm shadow-slate-500'
+				src='https://www.youtube.com/embed/lyZ3PntFbII'
+			></iframe>
 			<button className='w-11/12 flex items-center justify-center border border-slate-500 rounded py-1'>
 				<svg
 					fill='#ffff'

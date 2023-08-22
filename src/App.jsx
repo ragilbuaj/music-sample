@@ -12,8 +12,8 @@ function App() {
 	const [genre, setGenre] = useState("Classical");
 	const [year, setYear] = useState(1950);
 	const [accessToken, setAccessToken] = useState("");
+	const [songsData, setSongsData] = useState([]);
 	const [songs, setSongs] = useState([]);
-	// const range = 20;
 	const rangeYear = year + 20;
 
 	const handleClick = (display) => {
@@ -67,28 +67,50 @@ function App() {
 					},
 				});
 
-				const data = response.data.tracks.items.filter((song) => {
-					const yearOfSong = song.album.release_date.substring(0, 4);
-					return yearOfSong >= year && yearOfSong <= rangeYear;
-				});
-
-				const songs = data.map((song) => ({
-					title: song.name,
-					artist: song.artists[0].name,
-					album: song.album.name,
-					image: song.album.images,
-					year: song.album.release_date.substring(0, 4),
-				}));
-
-				setSongs(songs);
-
-				console.log(songs);
-				// console.log(response.data.tracks.items);
+				setSongsData(response.data.tracks.items);
 			} catch (error) {
 				console.error("Error: ", error);
 			}
 		}
+
 		getSongs();
+
+		// setTimeout(() => {
+		// 	const data = songsData.filter((song) => {
+		// 		const yearOfSong = song.album.release_date.substring(0, 4);
+		// 		return yearOfSong >= year && yearOfSong <= rangeYear;
+		// 	});
+
+		// 	const songs = data.map((song) => ({
+		// 		title: song.name,
+		// 		artist: song.artists[0].name,
+		// 		album: song.album.name,
+		// 		image: song.album.images,
+		// 		year: song.album.release_date.substring(0, 4),
+		// 	}));
+
+		// 	setSongs(songs);
+		// 	console.log(songs);
+		// }, 1000);
+
+		async function filteredSongs() {
+			const data = songsData.filter((song) => {
+				const yearOfSong = song.album.release_date.substring(0, 4);
+				return yearOfSong >= year && yearOfSong <= rangeYear;
+			});
+
+			const songs = data.map((song) => ({
+				title: song.name,
+				artist: song.artists[0].name,
+				album: song.album.name,
+				image: song.album.images,
+				year: song.album.release_date.substring(0, 4),
+			}));
+
+			setSongs(songs);
+		}
+
+		filteredSongs();
 	}, [genre]);
 
 	return (
@@ -96,7 +118,7 @@ function App() {
 			{/* <Sidebar /> */}
 			<Header setVisible={handleClick} />
 			<Player />
-			<Song />
+			<Song playlist={songs} />
 			{isShow ? (
 				<>
 					<Input activeState={handleClose} />
