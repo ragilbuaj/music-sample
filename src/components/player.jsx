@@ -1,8 +1,14 @@
 import "../App.css";
-import React from "react";
+import React, {useState} from "react";
 import Youtube from "react-youtube";
 
-function Player() {
+function Player({handleClick}) {
+	const [toogle, setToogle] = useState(false);
+
+	const handleButton = (params) => {
+		handleClick(params);
+		setToogle(!toogle);
+	};
 	return (
 		<section className='w-full my-3 flex flex-col gap-5 items-center justify-center'>
 			{/* <Youtube
@@ -15,7 +21,10 @@ function Player() {
 				src='https://www.youtube.com/embed/FKGy14ylwMk?autoplay=1'
 				allow='autoplay'
 			></iframe>
-			<button className='w-11/12 flex items-center justify-center border border-slate-500 rounded py-1'>
+			<button
+				className='w-11/12 flex items-center justify-center border border-slate-500 rounded py-1'
+				onClick={() => handleButton(!toogle)}
+			>
 				<svg
 					fill='#ffff'
 					width='25px'

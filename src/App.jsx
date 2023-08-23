@@ -6,17 +6,17 @@ import Header from "./components/header";
 import Player from "./components/player";
 import Song from "./components/song";
 import Input from "./components/input";
-import {data} from "autoprefixer";
 
 const clientId = "97d4afb8b0444284a2c618f1f6cb4feb";
 const clientSecret = "c0fd59f9d9ac4383ad54885c0b827376";
+const accessYoutube = "AIzaSyBuAftk5Dw-E90OHoPtfMt1I28Q8SYJSQY";
 
 function App() {
 	const [isShow, setIsShowing] = useState(false);
 	const [genre, setGenre] = useState("");
 	const [year, setYear] = useState(null);
 	const [accessToken, setAccessToken] = useState("");
-	const [songsData, setSongsData] = useState([]);
+	const [handleRandom, setHandleRandom] = useState(false);
 	const [randomSongs, setRandomSongs] = useState({
 		title: "Ride On Time",
 		artist: "Tatsuro Yamashita",
@@ -96,7 +96,7 @@ function App() {
 					);
 					const data = await fetching.json();
 
-					setSongsData(data.tracks.items);
+					// setSongsData(data.tracks.items);
 
 					const tracks = data.tracks.items.filter((song) => {
 						const yearOfSong = parseInt(
@@ -113,9 +113,6 @@ function App() {
 						year: track.album.release_date.substring(0, 4),
 					}));
 
-					// const newItems = [...songs, ...tracksDetail];
-					// setSongs(newItems);
-
 					if (tracksDetail.length > 0) {
 						const uniqueTracksDetail = tracksDetail.filter((trackDetail) => {
 							return !songs.some((song) => song.title === trackDetail.title);
@@ -128,17 +125,19 @@ function App() {
 
 						setRandomSongs(randomSong);
 
-						setSongs((prevSongs) => [...prevSongs, randomSong]);
+						setSongs((prevSongs) => [randomSong, ...prevSongs]);
 					}
 				} else {
 					null;
 				}
 			}
 			getData();
+
+			async function searchYoutube() {}
 		} catch (error) {
 			console.log("Error", error);
 		}
-	}, [genre, accessToken, year, rangeYear]);
+	}, [genre, accessToken, year, rangeYear, handleRandom]);
 
 	const handleClick = (display) => {
 		setIsShowing(display);
@@ -154,11 +153,15 @@ function App() {
 		setIsShowing(visible);
 	};
 
+	const handleButton = (params) => {
+		setHandleRandom(!params);
+	};
+
 	return (
 		<main className='h-screen w-full relative'>
 			{/* <Sidebar /> */}
 			<Header setVisible={handleClick} />
-			<Player />
+			<Player handleClick={handleButton} />
 			<Song playlist={songs} />
 			{isShow ? (
 				<>
