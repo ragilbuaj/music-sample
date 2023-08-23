@@ -6,10 +6,10 @@ import Header from "./components/header";
 import Player from "./components/player";
 import Song from "./components/song";
 import Input from "./components/input";
+import {data} from "autoprefixer";
 
 const clientId = "97d4afb8b0444284a2c618f1f6cb4feb";
 const clientSecret = "c0fd59f9d9ac4383ad54885c0b827376";
-const accessYoutube = "AIzaSyBuAftk5Dw-E90OHoPtfMt1I28Q8SYJSQY";
 
 function App() {
 	const [isShow, setIsShowing] = useState(false);
@@ -17,6 +17,7 @@ function App() {
 	const [year, setYear] = useState(null);
 	const [accessToken, setAccessToken] = useState("");
 	const [handleRandom, setHandleRandom] = useState(false);
+	const [videos, setVideos] = useState("FKGy14ylwMk");
 	const [randomSongs, setRandomSongs] = useState({
 		title: "Ride On Time",
 		artist: "Tatsuro Yamashita",
@@ -64,6 +65,7 @@ function App() {
 		},
 	]);
 	const rangeYear = parseInt(year) + 10;
+	let query = "";
 
 	useEffect(() => {
 		const authParams = {
@@ -95,8 +97,6 @@ function App() {
 						qParams
 					);
 					const data = await fetching.json();
-
-					// setSongsData(data.tracks.items);
 
 					const tracks = data.tracks.items.filter((song) => {
 						const yearOfSong = parseInt(
@@ -133,7 +133,40 @@ function App() {
 			}
 			getData();
 
-			async function searchYoutube() {}
+			query = "";
+
+			for (let title = 0; title < songs[0].title.length; title++) {
+				if (songs[0].title[title] === " ") {
+					query += "%20";
+				} else {
+					query += songs[0].title[title];
+				}
+			}
+			for (let artist = 0; artist < songs[0].artist.length; artist++) {
+				if (songs[0].artist[artist] === " ") {
+					query += "%20";
+				} else {
+					query += songs[0].artist[artist];
+				}
+			}
+
+			async function searchYoutube() {
+				const options = {
+					method: "GET",
+					headers: {
+						"X-RapidAPI-Key":
+							"c1f6b76c1cmshab8c206e0c38c92p189ba5jsnc9f59dc6582f",
+						"X-RapidAPI-Host": "youtube-search-and-download.p.rapidapi.com",
+					},
+				};
+
+				const url = `https://youtube-search-and-download.p.rapidapi.com/search?query=${query}&type=v&sort=r`;
+				const response = await fetch(url, options);
+				const data = await response.json();
+				setVideos(data.contents[0].video.videoId);
+			}
+
+			searchYoutube();
 		} catch (error) {
 			console.log("Error", error);
 		}
@@ -161,7 +194,7 @@ function App() {
 		<main className='h-screen w-full relative'>
 			{/* <Sidebar /> */}
 			<Header setVisible={handleClick} />
-			<Player handleClick={handleButton} />
+			<Player handleClick={handleButton} videoId={videos} />
 			<Song playlist={songs} />
 			{isShow ? (
 				<>

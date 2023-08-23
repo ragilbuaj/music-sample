@@ -2,23 +2,19 @@ import "../App.css";
 import React, {useState} from "react";
 import Youtube from "react-youtube";
 
-function Player({handleClick}) {
+function Player({handleClick, videoId}) {
 	const [toogle, setToogle] = useState(false);
 
 	const handleButton = (params) => {
 		handleClick(params);
 		setToogle(!toogle);
 	};
+
 	return (
 		<section className='w-full my-3 flex flex-col gap-5 items-center justify-center'>
-			{/* <Youtube
-				className='w-full flex items-center justify-center'
-				iframeClassName='w-11/12 h-[250px] rounded-xl shadow-sm shadow-slate-500'
-				videoId='7maJOI3QMu0'
-			/> */}
 			<iframe
 				className='w-11/12 h-[250px] rounded-xl shadow-sm shadow-slate-500'
-				src='https://www.youtube.com/embed/FKGy14ylwMk?autoplay=1'
+				src={`https://www.youtube.com/embed/${videoId}?autoplay=1`}
 				allow='autoplay'
 			></iframe>
 			<button
