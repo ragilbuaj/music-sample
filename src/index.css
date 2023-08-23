@@ -12,3 +12,11 @@
 	min-height: 100dvh;
 	background-color: #181818;
 }
+
+@media (min-width: 768px) {
+	#root {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+}

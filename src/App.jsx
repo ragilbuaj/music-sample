@@ -191,7 +191,7 @@ function App() {
 	};
 
 	return (
-		<main className='h-screen w-full relative'>
+		<main className='h-screen w-full relative md:w-[425px] md:place-self-center'>
 			{/* <Sidebar /> */}
 			<Header setVisible={handleClick} />
 			<Player handleClick={handleButton} videoId={videos} />
